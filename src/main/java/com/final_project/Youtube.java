@@ -94,7 +94,7 @@ public class Youtube extends JFrame {
 
     private void fetchAndDisplayResults(String query) {
         final String url = "https://www.googleapis.com/youtube/v3/search?q=" + query
-                + "&part=snippet&key=AIzaSyAcwnH2DaTJMSa27WMfjbp5KrEpwBk7mhs";
+                + "&part=snippet&key=API_KEY";
 
         String data = cache.checkCache(url);
 
