@@ -40,7 +40,7 @@ public class YoutubeTest {
                 @Override
                 public void run() {
                     tableModel.setRowCount(0);
-                    String searchQuery = "coding tutorials";
+                    String searchQuery = "coding";
                     youtubeApp.fetchAndDisplayResults(searchQuery);
                     latch.countDown();
                 }
