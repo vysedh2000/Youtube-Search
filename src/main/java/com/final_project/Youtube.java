@@ -12,28 +12,34 @@ import java.awt.event.MouseEvent;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.util.ArrayList;
+import java.util.*;
 import java.util.List;
+
+import com.final_project.Cache;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
 public class Youtube extends JFrame {
-    private static Cache cache = new Cache("");
+    private static Cache cache = new Cache("AIzaSyDwYO_x7psy0HiPBCIjhTG7Ue_FSO0Cy88");
+    public JTextField searchField;
+    public JButton searchButton;
+    public JButton sortButton;
+    public JButton clearCacheButton;
     public JTable table;
-    private DefaultTableModel model;
-    private JTextField searchField;
-    private TableRowSorter<DefaultTableModel> sorter;
-    private JProgressBar loadingIndicator = new JProgressBar();
+    public DefaultTableModel model;
+    public TableRowSorter<DefaultTableModel> sorter;
+    public JProgressBar loadingIndicator;
 
     public Youtube() {
+
         super("YouTube Data");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
         searchField = new JTextField(20);
-        JButton searchButton = new JButton("Search");
-        JButton sortButton = new JButton("Sort by Title");
-        JButton clearCacheButton = new JButton("Clear Cache");
-
+        searchButton = new JButton("Search");
+        sortButton = new JButton("Sort by Title");
+        clearCacheButton = new JButton("Clear Cache");
+        loadingIndicator = new JProgressBar();
         JPanel searchPanel = new JPanel();
         searchPanel.add(searchField);
         searchPanel.add(searchButton);
@@ -107,6 +113,7 @@ public class Youtube extends JFrame {
             public void actionPerformed(ActionEvent e) {
                 String query = searchField.getText();
                 fetchAndDisplayResults(query);
+
             }
         });
 
@@ -137,6 +144,7 @@ public class Youtube extends JFrame {
         SwingWorker<Void, Void> worker = new SwingWorker<Void, Void>() {
             @Override
             protected Void doInBackground() {
+                searchButton.setEnabled(false); // Disable the search button
                 loadingIndicator.setVisible(true);
 
                 // Fetch data from cache or API
@@ -166,6 +174,7 @@ public class Youtube extends JFrame {
 
                         dataList.add(new Object[] { title, videoId, channelId, Url });
                         progress = (int) (((double) i / itemCount) * 100);
+                        searchButton.setEnabled(true); // Disable the search button
                         loadingIndicator.setValue(progress);
                     }
 
@@ -202,15 +211,18 @@ public class Youtube extends JFrame {
     private boolean ascendingOrder = true;
 
     public void sortByTitle() {
+        // Sort the table based on title column
         List<? extends SortKey> sortKeys = sorter.getSortKeys();
-        if (sortKeys.isEmpty()
-                || sortKeys.get(0).getSortOrder() != (ascendingOrder ? SortOrder.ASCENDING : SortOrder.DESCENDING)) {
-            sorter.setSortKeys(List.of(new SortKey(0, ascendingOrder ? SortOrder.ASCENDING : SortOrder.DESCENDING)));
+        if (sortKeys.isEmpty() || sortKeys.get(0).getSortOrder() != (ascendingOrder ? SortOrder.ASCENDING : SortOrder.DESCENDING)) {
+            ascendingOrder = true; // Ensure ascending order
         } else {
-            ascendingOrder = !ascendingOrder;
-            sorter.setSortKeys(List.of(new SortKey(0, ascendingOrder ? SortOrder.ASCENDING : SortOrder.DESCENDING)));
+            ascendingOrder = !ascendingOrder; // Toggle the sorting order
         }
+        System.out.println("Sorting order: " + (ascendingOrder ? "Ascending" : "Descending")); // Debugging statement
+        sorter.setSortKeys(List.of(new SortKey(0, ascendingOrder ? SortOrder.ASCENDING : SortOrder.DESCENDING)));
     }
+
+
 
     public static void main(String[] args) {
         SwingUtilities.invokeLater(new Runnable() {

@@ -2,26 +2,17 @@ import com.final_project.Youtube;
 import org.junit.Before;
 import org.junit.Test;
 
-import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableRowSorter;
-import java.awt.*;
-import java.util.concurrent.CountDownLatch;
 
-import static org.junit.Assert.*;
 import static org.junit.Assert.*;
 
 import javax.swing.JButton;
 import javax.swing.JProgressBar;
 import javax.swing.JTable;
 import javax.swing.JTextField;
-import javax.swing.table.DefaultTableModel;
-import javax.swing.table.TableRowSorter;
 
-import org.junit.Before;
-import org.junit.Test;
-
-public class YoutubeTest2 {
+public class YoutubeTest {
 
     private Youtube youtube;
     private JTextField searchField;
@@ -101,6 +92,40 @@ public class YoutubeTest2 {
         assertEquals("Title C should be first after sorting descending", "Title C", table.getValueAt(0, 0));
         assertEquals("Title B should be second", "Title B", table.getValueAt(1, 0));
         assertEquals("Title A should be third", "Title A", table.getValueAt(2, 0));
+    }
+    @Test
+    public void testEmptySearchResults() {
+        searchField.setText("");
+        searchButton.doClick();
+
+        // Expect no change in the table's row count and appropriate UI behavior
+        assertEquals("Table should be empty after an empty search", 0, table.getRowCount());
+        assertFalse("Loading indicator should not be visible after search", loadingIndicator.isVisible());
+    }
+
+    @Test
+    public void testSearchFunctionality() {
+        String searchQuery = "java";
+        searchField.setText(searchQuery);
+        searchButton.doClick();
+
+        // Assume the search is performed asynchronously
+        try {
+            Thread.sleep(3000); // wait for the search to complete
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+        }
+
+        assertTrue("Table should have rows after search", table.getRowCount() > 0);
+        assertEquals("Search field should contain the query", searchQuery, searchField.getText());
+    }
+
+    @Test
+    public void testClearCacheFunctionality() {
+        model.addRow(new Object[]{"Video 1", "videoId4", "channelId4", "url4"});
+        clearCacheButton.doClick();
+
+        assertEquals("Table should be empty after clearing the cache", 0, table.getRowCount());
     }
 
 }
