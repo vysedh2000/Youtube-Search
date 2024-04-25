@@ -29,7 +29,8 @@ public class YoutubeTest {
         youtube = new Youtube();
         searchField = youtube.searchField;
         searchButton = youtube.searchButton;
-        sortButton = youtube.sortButton;;
+        sortButton = youtube.sortButton;
+        ;
         clearCacheButton = youtube.clearCacheButton;
         table = youtube.table;
         model = youtube.model;
@@ -68,6 +69,7 @@ public class YoutubeTest {
         for (int i = 0; i < table.getColumnCount(); i++) {
             firstRow[i] = table.getValueAt(0, i);
         }
+
         assertNotNull(firstRow[0]);
         assertNotNull(firstRow[1]);
         assertNotNull(firstRow[2]);
@@ -76,9 +78,9 @@ public class YoutubeTest {
 
     @Test
     public void testSortByTitle() {
-        model.addRow(new Object[]{"Title C", "videoId1", "channelId1", "url1"});
-        model.addRow(new Object[]{"Title A", "videoId2", "channelId2", "url2"});
-        model.addRow(new Object[]{"Title B", "videoId3", "channelId3", "url3"});
+        model.addRow(new Object[] { "Title C", "videoId1", "channelId1", "url1" });
+        model.addRow(new Object[] { "Title A", "videoId2", "channelId2", "url2" });
+        model.addRow(new Object[] { "Title B", "videoId3", "channelId3", "url3" });
 
         sorter.setModel(model);
         table.setRowSorter(sorter);
@@ -93,6 +95,7 @@ public class YoutubeTest {
         assertEquals("Title B should be second", "Title B", table.getValueAt(1, 0));
         assertEquals("Title A should be third", "Title A", table.getValueAt(2, 0));
     }
+
     @Test
     public void testEmptySearchResults() {
         searchField.setText("");
@@ -122,7 +125,7 @@ public class YoutubeTest {
 
     @Test
     public void testClearCacheFunctionality() {
-        model.addRow(new Object[]{"Video 1", "videoId4", "channelId4", "url4"});
+        model.addRow(new Object[] { "Video 1", "videoId4", "channelId4", "url4" });
         clearCacheButton.doClick();
 
         assertEquals("Table should be empty after clearing the cache", 0, table.getRowCount());

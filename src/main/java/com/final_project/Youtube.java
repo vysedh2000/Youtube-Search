@@ -15,12 +15,11 @@ import java.net.URISyntaxException;
 import java.util.*;
 import java.util.List;
 
-import com.final_project.Cache;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
 public class Youtube extends JFrame {
-    private static Cache cache = new Cache("AIzaSyDwYO_x7psy0HiPBCIjhTG7Ue_FSO0Cy88");
+    private static Cache cache = new Cache("", 20);
     public JTextField searchField;
     public JButton searchButton;
     public JButton sortButton;
@@ -213,7 +212,8 @@ public class Youtube extends JFrame {
     public void sortByTitle() {
         // Sort the table based on title column
         List<? extends SortKey> sortKeys = sorter.getSortKeys();
-        if (sortKeys.isEmpty() || sortKeys.get(0).getSortOrder() != (ascendingOrder ? SortOrder.ASCENDING : SortOrder.DESCENDING)) {
+        if (sortKeys.isEmpty()
+                || sortKeys.get(0).getSortOrder() != (ascendingOrder ? SortOrder.ASCENDING : SortOrder.DESCENDING)) {
             ascendingOrder = true; // Ensure ascending order
         } else {
             ascendingOrder = !ascendingOrder; // Toggle the sorting order
@@ -221,8 +221,6 @@ public class Youtube extends JFrame {
         System.out.println("Sorting order: " + (ascendingOrder ? "Ascending" : "Descending")); // Debugging statement
         sorter.setSortKeys(List.of(new SortKey(0, ascendingOrder ? SortOrder.ASCENDING : SortOrder.DESCENDING)));
     }
-
-
 
     public static void main(String[] args) {
         SwingUtilities.invokeLater(new Runnable() {

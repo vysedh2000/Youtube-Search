@@ -11,9 +11,11 @@ import java.net.URL;
 
 public class Cache {
     private String apiKey;
+    private int resultSize;
 
-    public Cache(String apiKey) {
+    public Cache(String apiKey, int resultSize) {
         this.apiKey = apiKey;
+        this.resultSize = resultSize;
         if (apiKey == null || apiKey.isEmpty()) {
             System.out.println("No API key provided. Exiting...");
             System.exit(1);
@@ -22,7 +24,7 @@ public class Cache {
 
     public String checkCache(String query) {
         String urlStr = "https://www.googleapis.com/youtube/v3/search?q=" + query.replace(" ", "_")
-                + "&type=video&part=snippet&key=" + apiKey;
+                + "&type=video&maxResults=" + resultSize + "&part=snippet&key=" + apiKey;
         String cacheFilePath = getCacheFilePath(query.replace(" ", "_"));
         File cacheFile = new File(cacheFilePath);
 
@@ -38,10 +40,9 @@ public class Cache {
             } catch (IOException e) {
                 e.printStackTrace();
             }
-            return null; // return null if there's an error reading the cache file
+            return null;
         }
 
-        // If cache file doesn't exist, make a HTTP request and cache the response
         try {
             URL url = new URL(urlStr);
             HttpURLConnection con = (HttpURLConnection) url.openConnection();
@@ -73,7 +74,7 @@ public class Cache {
     }
 
     public void clearCache() {
-        File cacheDir = new File("src/main/java/com/final_project/cache"); // adjust the path to your cache directory
+        File cacheDir = new File("src/main/java/com/final_project/cache");
         if (cacheDir.exists() && cacheDir.isDirectory()) {
             File[] files = cacheDir.listFiles();
             if (files != null) {
