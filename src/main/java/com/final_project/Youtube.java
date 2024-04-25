@@ -18,7 +18,7 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 public class Youtube extends JFrame {
-    private static Cache cache = new Cache("AIzaSyDwYO_x7psy0HiPBCIjhTG7Ue_FSO0Cy88");
+    private static Cache cache = new Cache("");
     public JTable table;
     private DefaultTableModel model;
     private JTextField searchField;

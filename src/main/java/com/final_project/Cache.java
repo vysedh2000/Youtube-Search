@@ -23,7 +23,7 @@ public class Cache {
     public String checkCache(String query) {
         String urlStr = "https://www.googleapis.com/youtube/v3/search?q=" + query.replace(" ", "_")
                 + "&type=video&part=snippet&key=" + apiKey;
-        String cacheFilePath = getCacheFilePath(query);
+        String cacheFilePath = getCacheFilePath(query.replace(" ", "_"));
         File cacheFile = new File(cacheFilePath);
 
         if (cacheFile.exists() && cacheFile.isFile()) {
@@ -54,7 +54,7 @@ public class Cache {
                     responseBuilder.append(inputLine).append("\n");
                 }
                 String response = responseBuilder.toString();
-                writeCacheToFile(query, response); // cache the response
+                writeCacheToFile(query.replace(" ", "_"), response); // cache the response
                 return response;
             }
         } catch (IOException e) {
@@ -64,7 +64,7 @@ public class Cache {
     }
 
     public void writeCacheToFile(String query, String data) {
-        String filePath = getCacheFilePath(query);
+        String filePath = getCacheFilePath(query.replace(" ", "_"));
         try (FileWriter writer = new FileWriter(filePath)) {
             writer.write(data);
         } catch (IOException e) {
@@ -92,7 +92,7 @@ public class Cache {
         if (!cacheDir.exists()) {
             cacheDir.mkdirs();
         }
-        System.out.println(cacheDirPath + File.separator + query + ".txt");
-        return cacheDirPath + File.separator + query + ".txt";
+        System.out.println(cacheDirPath + File.separator + query.replace(" ", "_") + ".txt");
+        return cacheDirPath + File.separator + query.replace(" ", "_") + ".txt";
     }
 }
