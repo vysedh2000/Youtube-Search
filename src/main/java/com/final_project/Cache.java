@@ -10,10 +10,19 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 
 public class Cache {
+    private String apiKey;
+
+    public Cache(String apiKey) {
+        this.apiKey = apiKey;
+        if (apiKey == null || apiKey.isEmpty()) {
+            System.out.println("No API key provided. Exiting...");
+            System.exit(1);
+        }
+    }
 
     public String checkCache(String query) {
-        String urlStr = "https://www.googleapis.com/youtube/v3/search?q=" + query
-                + "&type=video&part=snippet&key=AIzaSyDwYO_x7psy0HiPBCIjhTG7Ue_FSO0Cy88";
+        String urlStr = "https://www.googleapis.com/youtube/v3/search?q=" + query.replace(" ", "_")
+                + "&type=video&part=snippet&key=" + apiKey;
         String cacheFilePath = getCacheFilePath(query);
         File cacheFile = new File(cacheFilePath);
 

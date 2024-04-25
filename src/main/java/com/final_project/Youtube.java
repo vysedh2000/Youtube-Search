@@ -1,9 +1,7 @@
 package com.final_project;
 
 import javax.swing.*;
-import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
-import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableRowSorter;
 import javax.swing.RowSorter.SortKey;
 import java.awt.*;
@@ -11,25 +9,17 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
-import java.io.FileWriter;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import org.json.JSONArray;
-import org.json.JSONException;
 import org.json.JSONObject;
 
 public class Youtube extends JFrame {
-    private static Cache cache = new Cache();
-    private JTable table;
+    private static Cache cache = new Cache("AIzaSyDwYO_x7psy0HiPBCIjhTG7Ue_FSO0Cy88");
+    public JTable table;
     private DefaultTableModel model;
     private JTextField searchField;
     private TableRowSorter<DefaultTableModel> sorter;
@@ -137,7 +127,7 @@ public class Youtube extends JFrame {
                 System.out.println("Cache cleared.");
             }
         });
-
+        setLocationRelativeTo(null); // Center the JFrame on the screen
         pack();
         setVisible(true);
     }
@@ -228,26 +218,5 @@ public class Youtube extends JFrame {
                 new Youtube();
             }
         });
-    }
-}
-
-class URLRenderer extends DefaultTableCellRenderer {
-    @Override
-    public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus,
-            int row, int column) {
-        JLabel label = (JLabel) super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
-        label.setText((String) value);
-        label.setForeground(Color.BLUE);
-        label.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-
-        if (table.getRowCount() > row && table.getColumnCount() > column) {
-            if (table.getCellRect(row, column, true).contains(table.getMousePosition())) {
-                label.setText("<html><u>" + value + "</u></html>");
-            } else {
-                label.setText((String) value);
-            }
-        }
-
-        return label;
     }
 }
