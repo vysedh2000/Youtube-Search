@@ -16,6 +16,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.List;
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -27,6 +28,7 @@ public class Youtube extends JFrame {
     private DefaultTableModel model;
     private JTextField searchField;
     private TableRowSorter<DefaultTableModel> sorter;
+    private JProgressBar loadingIndicator = new JProgressBar();
 
     public Youtube() {
         super("YouTube Data");
@@ -41,6 +43,10 @@ public class Youtube extends JFrame {
         searchPanel.add(searchField);
         searchPanel.add(searchButton);
         searchPanel.add(sortButton);
+        loadingIndicator.setVisible(false);
+        add(loadingIndicator, BorderLayout.NORTH);
+
+        // Create a loading indicator
 
         table = new JTable();
         model = new DefaultTableModel();
@@ -93,38 +99,70 @@ public class Youtube extends JFrame {
     }
 
     private void fetchAndDisplayResults(String query) {
-        final String url = "https://www.googleapis.com/youtube/v3/search?q=" + query
-                + "&part=snippet&key=API_KEY";
+        // Create a SwingWorker to fetch data in the background
+        SwingWorker<Void, Void> worker = new SwingWorker<Void, Void>() {
+            @Override
+            protected Void doInBackground() {
+                loadingIndicator.setVisible(true);
 
-        String data = cache.checkCache(url);
+                // Fetch data from cache or API
+                String data = cache.checkCache(query);
+                if (data != null) {
+                    // Parse JSON data
+                    JSONObject data_obj = new JSONObject(data);
+                    JSONArray items = data_obj.getJSONArray("items");
 
-        model.setRowCount(0);
+                    // Create a list to store the data
+                    List<Object[]> dataList = new ArrayList<>();
+                    int itemCount = items.length();
+                    int progress = 0;
 
-        try {
-            if (data != null) {
-                JSONObject data_obj = new JSONObject(data);
-                JSONArray items = data_obj.getJSONArray("items");
+                    for (int i = 0; i < items.length(); i++) {
+                        JSONObject item = items.getJSONObject(i);
+                        JSONObject snippet = item.getJSONObject("snippet");
+                        JSONObject id = item.getJSONObject("id");
 
-                for (int i = 0; i < items.length(); i++) {
-                    JSONObject item = items.getJSONObject(i);
-                    JSONObject snippet = item.getJSONObject("snippet");
-                    JSONObject id = item.getJSONObject("id");
+                        String title = snippet.getString("title");
+                        String videoId = id.getString("videoId");
+                        // if (videoId == null || videoId.isEmpty()) {
+                        // videoId = id.getString("channelId");
+                        // }
+                        String channelId = snippet.getString("channelId");
+                        String Url = "https://www.youtube.com/watch?v=" + videoId;
 
-                    String title = snippet.getString("title");
-                    String videoId = id.getString("videoId");
-                    String channelId = snippet.getString("channelId");
-                    String Url = "https://www.youtube.com/watch?v=" + videoId;
+                        dataList.add(new Object[] { title, videoId, channelId, Url });
+                        progress = (int) (((double) i / itemCount) * 100);
+                        loadingIndicator.setValue(progress);
+                    }
 
-                    model.addRow(new Object[] { title, videoId, channelId, Url });
+                    // Cache the data
+                    cache.writeCacheToFile(query, data);
+
+                    // Update the UI with the fetched data
+                    SwingUtilities.invokeLater(new Runnable() {
+                        public void run() {
+                            model.setRowCount(0);
+                            for (Object[] row : dataList) {
+                                model.addRow(row);
+                            }
+                        }
+                    });
+                } else {
+                    System.out.println("No data retrieved from cache or API for query: " + query);
                 }
 
-                cache.writeCacheToFile(url, data);
-            } else {
-                System.out.println("No data retrieved from cache or API for query: " + query);
+                return null;
             }
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
+
+            @Override
+            protected void done() {
+                // Remove the loading indicator
+                loadingIndicator.setVisible(false);
+            }
+        };
+
+        // Start the SwingWorker
+        worker.execute();
     }
 
     private boolean ascendingOrder = true;
@@ -146,59 +184,5 @@ public class Youtube extends JFrame {
                 new Youtube();
             }
         });
-    }
-}
-
-class Cache {
-    private static final String CACHE_DIR_NAME = "youtube_api_cache";
-
-    public String checkCache(String url_str) {
-        StringBuilder response = new StringBuilder();
-        try {
-            URL url = new URL(url_str);
-            HttpURLConnection con = (HttpURLConnection) url.openConnection();
-            con.setRequestMethod("GET");
-
-            BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream()));
-            String inputLine;
-
-            while ((inputLine = in.readLine()) != null) {
-                response.append(inputLine);
-            }
-            in.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return response.toString();
-    }
-
-    public void writeCacheToFile(String url, String data) {
-        String filePath = getCacheFilePath(url);
-        try (FileWriter writer = new FileWriter(filePath)) {
-            writer.write(data);
-        } catch (IOException e) {
-            System.err.println("Error writing to cache file: " + e.getMessage());
-        }
-    }
-
-    public void clearCache() {
-        File cacheDir = new File(System.getProperty("user.home") + File.separator + CACHE_DIR_NAME);
-        if (cacheDir.exists()) {
-            File[] files = cacheDir.listFiles();
-            for (File file : files) {
-                if (file.isFile()) {
-                    file.delete();
-                }
-            }
-        }
-    }
-
-    private String getCacheFilePath(String url) {
-        String cacheDirPath = System.getProperty("user.home") + File.separator + CACHE_DIR_NAME;
-        File cacheDir = new File(cacheDirPath);
-        if (!cacheDir.exists()) {
-            cacheDir.mkdirs();
-        }
-        return cacheDirPath + File.separator + url.hashCode() + ".txt";
     }
 }
