@@ -1,13 +1,16 @@
 package com.final_project;
 
 import javax.swing.*;
+import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableRowSorter;
 import javax.swing.RowSorter.SortKey;
-
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
@@ -15,6 +18,8 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
@@ -49,19 +54,55 @@ public class Youtube extends JFrame {
         // Create a loading indicator
 
         table = new JTable();
+        table.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                if (e.getClickCount() == 1) {
+                    int row = table.rowAtPoint(e.getPoint());
+                    int col = table.columnAtPoint(e.getPoint());
+                    if (col == 3) { // URL column
+                        String url = (String) table.getValueAt(row, col);
+                        try {
+                            Desktop desktop = Desktop.getDesktop();
+                            URI uri = new URI(url);
+                            desktop.browse(uri);
+                        } catch (IOException | URISyntaxException ex) {
+                            System.err.println("Error opening URL: " + ex.getMessage());
+                        }
+                    }
+                }
+            }
+
+            @Override
+            public void mouseEntered(MouseEvent e) {
+                int col = table.columnAtPoint(e.getPoint());
+                if (col == 3) {
+                    table.setToolTipText("Open URL");
+                    table.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+                }
+            }
+
+            @Override
+            public void mouseExited(MouseEvent e) {
+                table.setCursor(Cursor.getDefaultCursor());
+            }
+        });
+
         model = new DefaultTableModel();
         model.addColumn("Title");
         model.addColumn("Video ID");
         model.addColumn("Channel ID");
         model.addColumn("URL");
         table.setModel(model);
+        // table.getColumnModel().getColumn(3).setCellRenderer(new URLRenderer());
 
         sorter = new TableRowSorter<>(model);
         table.setRowSorter(sorter);
 
         JScrollPane scrollPane = new JScrollPane(table);
 
-        JPanel mainPanel = new JPanel(new BorderLayout());
+        JPanel mainPanel = new JPanel(
+                new BorderLayout());
         mainPanel.add(searchPanel, BorderLayout.NORTH);
         mainPanel.add(scrollPane, BorderLayout.CENTER);
 
@@ -89,6 +130,9 @@ public class Youtube extends JFrame {
         clearCacheButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                DefaultTableModel model = (DefaultTableModel) table.getModel();
+                model.setRowCount(0); //
+                searchField.setText("");
                 cache.clearCache();
                 System.out.println("Cache cleared.");
             }
@@ -184,5 +228,26 @@ public class Youtube extends JFrame {
                 new Youtube();
             }
         });
+    }
+}
+
+class URLRenderer extends DefaultTableCellRenderer {
+    @Override
+    public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus,
+            int row, int column) {
+        JLabel label = (JLabel) super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
+        label.setText((String) value);
+        label.setForeground(Color.BLUE);
+        label.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+
+        if (table.getRowCount() > row && table.getColumnCount() > column) {
+            if (table.getCellRect(row, column, true).contains(table.getMousePosition())) {
+                label.setText("<html><u>" + value + "</u></html>");
+            } else {
+                label.setText((String) value);
+            }
+        }
+
+        return label;
     }
 }
