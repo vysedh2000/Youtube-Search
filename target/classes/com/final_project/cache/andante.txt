@@ -1,0 +1,182 @@
+{
+  "kind": "youtube#searchListResponse",
+  "etag": "IJPLTikow7LpE46z_4kA66WwQRM",
+  "nextPageToken": "CAUQAA",
+  "regionCode": "KH",
+  "pageInfo": {
+    "totalResults": 1000000,
+    "resultsPerPage": 5
+  },
+  "items": [
+    {
+      "kind": "youtube#searchResult",
+      "etag": "TQlEjPsgPiCv1JGlt5gSLHAoIm8",
+      "id": {
+        "kind": "youtube#video",
+        "videoId": "srqwwwEzL4s"
+      },
+      "snippet": {
+        "publishedAt": "2022-01-28T05:27:40Z",
+        "channelId": "UC1xfzHrZz5hZeV6oy6o7A-g",
+        "title": "ABBA - Andante, Andante (Lyrics)",
+        "description": "Follow ABBA! Instagram: https://instagram.com/abba?utm_medium=copy_link Facebook: https://www.facebook.com/ABBA Twitter: ...",
+        "thumbnails": {
+          "default": {
+            "url": "https://i.ytimg.com/vi/srqwwwEzL4s/default.jpg",
+            "width": 120,
+            "height": 90
+          },
+          "medium": {
+            "url": "https://i.ytimg.com/vi/srqwwwEzL4s/mqdefault.jpg",
+            "width": 320,
+            "height": 180
+          },
+          "high": {
+            "url": "https://i.ytimg.com/vi/srqwwwEzL4s/hqdefault.jpg",
+            "width": 480,
+            "height": 360
+          }
+        },
+        "channelTitle": "- lyrics4life -",
+        "liveBroadcastContent": "none",
+        "publishTime": "2022-01-28T05:27:40Z"
+      }
+    },
+    {
+      "kind": "youtube#searchResult",
+      "etag": "P641HTOjetPPedqZYI3pBaXym1Q",
+      "id": {
+        "kind": "youtube#video",
+        "videoId": "CS-30pO94lo"
+      },
+      "snippet": {
+        "publishedAt": "2018-12-12T08:34:32Z",
+        "channelId": "UCuubAXN9AYgtcmSrD0frggQ",
+        "title": "Andante, Andante",
+        "description": "Provided to YouTube by Universal Music Group Andante, Andante · ABBA Super Trouper ℗ 1980 Polar Music International AB ...",
+        "thumbnails": {
+          "default": {
+            "url": "https://i.ytimg.com/vi/CS-30pO94lo/default.jpg",
+            "width": 120,
+            "height": 90
+          },
+          "medium": {
+            "url": "https://i.ytimg.com/vi/CS-30pO94lo/mqdefault.jpg",
+            "width": 320,
+            "height": 180
+          },
+          "high": {
+            "url": "https://i.ytimg.com/vi/CS-30pO94lo/hqdefault.jpg",
+            "width": 480,
+            "height": 360
+          }
+        },
+        "channelTitle": "ABBA - Topic",
+        "liveBroadcastContent": "none",
+        "publishTime": "2018-12-12T08:34:32Z"
+      }
+    },
+    {
+      "kind": "youtube#searchResult",
+      "etag": "CTcPYfFpUpB5oH7FtTpzbGSDG5U",
+      "id": {
+        "kind": "youtube#video",
+        "videoId": "D9AI3U_QDz4"
+      },
+      "snippet": {
+        "publishedAt": "2024-03-29T13:00:23Z",
+        "channelId": "UCqzx-RJyMESr4U7Q49EDLmQ",
+        "title": "Ana Beregoi X Iuliana Beregoi - Antante [Oficial video]",
+        "description": "Ia-ti si tu bilet la Arenele Romane, la cel mai tare concert cu Iuliana Beregoi, pe 8 iunie la lansarea albumului Pas cu pas: ...",
+        "thumbnails": {
+          "default": {
+            "url": "https://i.ytimg.com/vi/D9AI3U_QDz4/default.jpg",
+            "width": 120,
+            "height": 90
+          },
+          "medium": {
+            "url": "https://i.ytimg.com/vi/D9AI3U_QDz4/mqdefault.jpg",
+            "width": 320,
+            "height": 180
+          },
+          "high": {
+            "url": "https://i.ytimg.com/vi/D9AI3U_QDz4/hqdefault.jpg",
+            "width": 480,
+            "height": 360
+          }
+        },
+        "channelTitle": "MIXTON MUSIC",
+        "liveBroadcastContent": "none",
+        "publishTime": "2024-03-29T13:00:23Z"
+      }
+    },
+    {
+      "kind": "youtube#searchResult",
+      "etag": "ZlVkRy64fCWOs6-BkGplibHc-us",
+      "id": {
+        "kind": "youtube#video",
+        "videoId": "awJOAQh69_U"
+      },
+      "snippet": {
+        "publishedAt": "2024-04-03T18:21:02Z",
+        "channelId": "UCJYX9zpBTFJDaQmasSle3TA",
+        "title": "Spice and Wolf: Merchant Meets the Wise Wolf - Ending FULL &quot;Andante&quot; by ClariS (Lyrics)",
+        "description": "Listen on Spotify https://open.spotify.com/playlist/5cUzXRf2S565QYfqVPAhkq?si=b32e9dd7dbf74f18 Spice and Wolf: Merchant ...",
+        "thumbnails": {
+          "default": {
+            "url": "https://i.ytimg.com/vi/awJOAQh69_U/default.jpg",
+            "width": 120,
+            "height": 90
+          },
+          "medium": {
+            "url": "https://i.ytimg.com/vi/awJOAQh69_U/mqdefault.jpg",
+            "width": 320,
+            "height": 180
+          },
+          "high": {
+            "url": "https://i.ytimg.com/vi/awJOAQh69_U/hqdefault.jpg",
+            "width": 480,
+            "height": 360
+          }
+        },
+        "channelTitle": "Jamong",
+        "liveBroadcastContent": "none",
+        "publishTime": "2024-04-03T18:21:02Z"
+      }
+    },
+    {
+      "kind": "youtube#searchResult",
+      "etag": "do9YHIrcA0HL7wlRkVj55LvHlYs",
+      "id": {
+        "kind": "youtube#video",
+        "videoId": "6hNEXuHm8OM"
+      },
+      "snippet": {
+        "publishedAt": "2018-07-11T08:35:54Z",
+        "channelId": "UCrPhCgt2hXDl5SwFJ-x2Nlg",
+        "title": "Andante, Andante",
+        "description": "Provided to YouTube by Universal Music Group Andante, Andante · Lily James Mamma Mia! Here We Go Again ℗ 2018 Littlestar ...",
+        "thumbnails": {
+          "default": {
+            "url": "https://i.ytimg.com/vi/6hNEXuHm8OM/default.jpg",
+            "width": 120,
+            "height": 90
+          },
+          "medium": {
+            "url": "https://i.ytimg.com/vi/6hNEXuHm8OM/mqdefault.jpg",
+            "width": 320,
+            "height": 180
+          },
+          "high": {
+            "url": "https://i.ytimg.com/vi/6hNEXuHm8OM/hqdefault.jpg",
+            "width": 480,
+            "height": 360
+          }
+        },
+        "channelTitle": "Lily James - Topic",
+        "liveBroadcastContent": "none",
+        "publishTime": "2018-07-11T08:35:54Z"
+      }
+    }
+  ]
+}

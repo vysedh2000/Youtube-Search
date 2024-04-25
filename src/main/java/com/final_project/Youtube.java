@@ -98,7 +98,7 @@ public class Youtube extends JFrame {
         setVisible(true);
     }
 
-    private void fetchAndDisplayResults(String query) {
+    public void fetchAndDisplayResults(String query) {
         // Create a SwingWorker to fetch data in the background
         SwingWorker<Void, Void> worker = new SwingWorker<Void, Void>() {
             @Override
@@ -167,7 +167,7 @@ public class Youtube extends JFrame {
 
     private boolean ascendingOrder = true;
 
-    private void sortByTitle() {
+    public void sortByTitle() {
         List<? extends SortKey> sortKeys = sorter.getSortKeys();
         if (sortKeys.isEmpty()
                 || sortKeys.get(0).getSortOrder() != (ascendingOrder ? SortOrder.ASCENDING : SortOrder.DESCENDING)) {
