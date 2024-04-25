@@ -1,107 +1,106 @@
+import com.final_project.Youtube;
 import org.junit.Before;
 import org.junit.Test;
-import com.final_project.Youtube;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableRowSorter;
+import java.awt.*;
 import java.util.concurrent.CountDownLatch;
-import java.util.concurrent.TimeUnit;
 
 import static org.junit.Assert.*;
+import static org.junit.Assert.*;
 
-public class YoutubeTest {
-    private Youtube youtubeApp;
-    private DefaultTableModel tableModel;
-    private CountDownLatch latch;
+import javax.swing.JButton;
+import javax.swing.JProgressBar;
+import javax.swing.JTable;
+import javax.swing.JTextField;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableRowSorter;
+
+import org.junit.Before;
+import org.junit.Test;
+
+public class YoutubeTest2 {
+
+    private Youtube youtube;
+    private JTextField searchField;
+    private JButton searchButton;
+    private JButton sortButton;
+    private JButton clearCacheButton;
+    private JTable table;
+    private DefaultTableModel model;
+    private TableRowSorter<DefaultTableModel> sorter;
+    private JProgressBar loadingIndicator;
 
     @Before
-    public void setUp() {
-        try {
-            latch = new CountDownLatch(1);
-            SwingUtilities.invokeAndWait(new Runnable() {
-                @Override
-                public void run() {
-                    youtubeApp = new Youtube();
-                    tableModel = (DefaultTableModel) youtubeApp.table.getModel();
-                    latch.countDown();
-                }
-            });
-            latch.await(5, TimeUnit.SECONDS);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+    public void setUp() throws Exception {
+        youtube = new Youtube();
+        searchField = youtube.searchField;
+        searchButton = youtube.searchButton;
+        sortButton = youtube.sortButton;;
+        clearCacheButton = youtube.clearCacheButton;
+        table = youtube.table;
+        model = youtube.model;
+        sorter = youtube.sorter;
+        loadingIndicator = youtube.loadingIndicator;
     }
 
     @Test
-    public void testSearchFunction() {
+    public void testComponentsExistence() {
+        assertNotNull("Search field should not be null", searchField);
+        assertNotNull("Search button should not be null", searchButton);
+        assertNotNull("Sort button should not be null", sortButton);
+        assertNotNull("Clear cache button should not be null", clearCacheButton);
+        assertNotNull("Table should not be null", table);
+        assertNotNull("Model should not be null", model);
+        assertNotNull("Sorter should not be null", sorter);
+        assertNotNull("Loading indicator should not be null", loadingIndicator);
+    }
+
+    @Test
+    public void testFetchAndDisplayResults() {
+        String searchQuery = "coding";
+        youtube.fetchAndDisplayResults(searchQuery);
+
         try {
-            latch = new CountDownLatch(1);
-            SwingUtilities.invokeAndWait(new Runnable() {
-                @Override
-                public void run() {
-                    tableModel.setRowCount(0);
-                    String searchQuery = "coding";
-                    youtubeApp.fetchAndDisplayResults(searchQuery);
-                    latch.countDown();
-                }
-            });
-            latch.await(10, TimeUnit.SECONDS);
-
-            int rowCount = tableModel.getRowCount();
-            assertTrue(rowCount > 0);
-
-            Object[] firstRow = new Object[tableModel.getColumnCount()];
-            for (int i = 0; i < tableModel.getColumnCount(); i++) {
-                firstRow[i] = tableModel.getValueAt(0, i);
-            }
-            assertNotNull(firstRow[0]);
-            assertNotNull(firstRow[1]);
-            assertNotNull(firstRow[2]);
-            assertNotNull(firstRow[3]);
-        } catch (Exception e) {
+            Thread.sleep(2000);
+        } catch (InterruptedException e) {
             e.printStackTrace();
         }
+
+        int rowCount = table.getRowCount();
+        assertTrue(rowCount > 0);
+
+        // Check if the first row contains data
+        Object[] firstRow = new Object[table.getColumnCount()];
+        for (int i = 0; i < table.getColumnCount(); i++) {
+            firstRow[i] = table.getValueAt(0, i);
+        }
+        assertNotNull(firstRow[0]);
+        assertNotNull(firstRow[1]);
+        assertNotNull(firstRow[2]);
+        assertNotNull(firstRow[3]);
     }
 
     @Test
     public void testSortByTitle() {
-        try {
-            latch = new CountDownLatch(1);
-            SwingUtilities.invokeAndWait(new Runnable() {
-                @Override
-                public void run() {
-                    tableModel.setRowCount(0);
-                    Object[] row1 = { "Title C", "videoId1", "channelId1", "url1" };
-                    Object[] row2 = { "Title A", "videoId2", "channelId2", "url2" };
-                    Object[] row3 = { "Title B", "videoId3", "channelId3", "url3" };
-                    tableModel.addRow(row1);
-                    tableModel.addRow(row2);
-                    tableModel.addRow(row3);
-                    youtubeApp.sortByTitle();
-                    latch.countDown();
-                }
-            });
-            latch.await(5, TimeUnit.SECONDS);
+        model.addRow(new Object[]{"Title C", "videoId1", "channelId1", "url1"});
+        model.addRow(new Object[]{"Title A", "videoId2", "channelId2", "url2"});
+        model.addRow(new Object[]{"Title B", "videoId3", "channelId3", "url3"});
 
-            assertEquals("Title A", tableModel.getValueAt(0, 0));
-            assertEquals("Title B", tableModel.getValueAt(1, 0));
-            assertEquals("Title C", tableModel.getValueAt(2, 0));
+        sorter.setModel(model);
+        table.setRowSorter(sorter);
 
-            latch = new CountDownLatch(1);
-            SwingUtilities.invokeAndWait(new Runnable() {
-                @Override
-                public void run() {
-                    youtubeApp.sortByTitle();
-                    latch.countDown();
-                }
-            });
-            latch.await(5, TimeUnit.SECONDS);
+        youtube.sortByTitle(); // Assume this sorts in ascending order first
+        assertEquals("Title A should be first after sorting ascending", "Title A", table.getValueAt(0, 0));
+        assertEquals("Title B should be second", "Title B", table.getValueAt(1, 0));
+        assertEquals("Title C should be third", "Title C", table.getValueAt(2, 0));
 
-            assertEquals("Title C", tableModel.getValueAt(0, 0));
-            assertEquals("Title B", tableModel.getValueAt(1, 0));
-            assertEquals("Title A", tableModel.getValueAt(2, 0));
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        youtube.sortByTitle(); // Assume calling again toggles to descending order
+        assertEquals("Title C should be first after sorting descending", "Title C", table.getValueAt(0, 0));
+        assertEquals("Title B should be second", "Title B", table.getValueAt(1, 0));
+        assertEquals("Title A should be third", "Title A", table.getValueAt(2, 0));
     }
+
 }
